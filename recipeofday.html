@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>recipe of day</title>
+    <style>
+         #navbar{
+            border: 1px solid red;
+            display: flex;
+            border-radius: 10px;
+            justify-content: space-around;
+            background-color: #F1948A ;
+        }
+        #search{
+            padding: 10px;
+        }
+        #search>input{
+            padding: 10px;
+            width: 300px;
+            border-radius: 10px;
+        }
+        #clickme{
+            /* border: 1px solid red; */
+            width: 500px;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-radius: 10px;
+            /* background-color: aquamarine ; */
+        }
+        #clickme>div{
+            border: 1px solid ;
+            padding: 10px;
+            width: 400px;
+            border-radius: 10px;
+            margin-left: 10px;
+            color: white;
+            /* background-color: white ; */
+        }
+
+
+        h3{
+            color: teal;
+            background-color: aquamarine;
+            padding: 10px;
+        }
+        
+        #main{
+            display: flex;
+            border: 1px solid red;
+            justify-content: center;
+            /* background-color: aquamarine ; */
+        }
+       #imgdiv{
+            border: 1px solid red;
+            width: 30%;
+            height: 400px;
+            padding: 20px;
+            margin: 20px;
+       }
+       #details{
+            border: 1px solid red;
+            width: 30%;
+            padding: 20px;
+            margin: 20px;
+       }
+       #video{
+            border: 1px solid red;
+            width: 30%;
+            height: 400px;
+            padding: 20px;
+            margin: 20px;
+       }
+       #imgdiv>img{
+           width: 100%;
+           height: 100%;
+       }
+       p{
+           color: #117A65;
+       }
+    </style>
+</head>
+<body>
+    <div id="nav-bar-container"></div>
+
+    <h3>Meal of the day</h3>
+    <div id="main">
+        <div id="imgdiv"></div>
+        <div id="details"></div>
+     
+    </div>
+</body>
+</html>
+
+<script type="module" >
+
+import navbar from "./components/navbar.js"
+
+console.log(navbar)
+
+let navbar_div =  document.getElementById("nav-bar-container");
+navbar_div.innerHTML = navbar();
+
+
+   async function recipe_of_day(){
+       try{
+           var res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
+           var data = await res.json();
+           console.log(data); 
+           show_meal(data.meals);        
+       }
+       catch(err){
+           console.log(err)
+       }
+   }
+
+   recipe_of_day();
+    
+//    const show_meal = (meal) => {
+      const  show_meal = (meal) =>{ 
+       console.log(meal)
+       console.log(meal[0])
+
+       const {       
+            strArea,
+            strCategory,
+            strIngredient1,
+            strIngredient2,
+            strIngredient3,
+            strIngredient4,
+            strIngredient5,
+            strIngredient6,
+            strIngredient7,
+            strIngredient8,
+            strIngredient9,
+            strInstructions, 
+            strMeal,
+            strMealThumb,
+            strTags,
+            strYoutube,
+       } = meal[0];
+      
+      var img = document.createElement("img")
+      img.src = strMealThumb; 
+      document.getElementById("imgdiv").append(img)
+   
+
+      var p = document.createElement("p")
+      p.textContent = `Area : ${strArea}`;
+
+      var p1 = document.createElement("p")
+      p1.textContent = `Category : ${strCategory}`;
+
+      var p2 = document.createElement("p")
+      p2.textContent =  `Igredients : ${ strIngredient1 }, ${strIngredient2}, ${strIngredient3}, ${strIngredient4}, ${strIngredient5}, ${strIngredient6}, ${strIngredient7}`;
+      
+      var p8 = document.createElement("p")
+      p8.textContent =  `Tags : ${strTags}`;
+
+      var p9 = document.createElement("p")
+      p9.textContent =  `Instructions : ${strInstructions}`;
+      
+         
+      var p10 = document.createElement("h3")
+      p10.textContent =  `Meal : ${ strMeal}`;
+
+      document.getElementById("details").append(p10,p,p1,p2,p8,p9)
+
+    
+    }
+
+</script>
+
+<!-- ` ${}` -->

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #navbar{
+            border: 1px solid red;
+            display: flex;
+            border-radius: 10px;
+            justify-content: space-around;
+            background-color: #F1948A ;
+        }
+        #search{
+            padding: 10px;
+        }
+        #search>input{
+            padding: 10px;
+            width: 300px;
+            border-radius: 10px;
+        }
+        #clickme{
+            /* border: 1px solid red; */
+            width: 500px;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-radius: 10px;
+            /* background-color: aquamarine ; */
+        }
+        #clickme>div{
+            border: 1px solid ;
+            padding: 10px;
+            width: 400px;
+            border-radius: 10px;
+            margin-left: 10px;
+            color: white;
+            /* background-color: white ; */
+        }
+
+        #container{
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 20px;
+            justify-content: center;
+        }
+        #card{
+            /* border: 1px solid red; */
+            padding: 20px;
+            text-align: center;
+            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+            
+        }
+        #card:hover {
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+            padding: 30px;
+        }
+        #card>img{
+            width: 100%;
+        }
+        h3{
+            color: teal;
+            background-color: aquamarine;
+            padding: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    
+    <div id="nav-bar-container"></div>
+    <!-- <div id="navbar">
+        <div id="search" >
+            <input id="searchmeal" oninput="debounce(searchresult,2000)" type="text" placeholder="Find a recipe">
+        </div>
+        <div id="clickme">
+            <div onclick="window.location.href='latest.html'">latest recipe</div>
+            <div onclick="window.location.href='recipeofday.html'">recipe of the day</div>
+        </div>
+    </div> -->
+
+   
+     
+    <h3> Latest recipes</h3>
+    <div id="container"></div>
+    
+</body>
+</html>
+
+<script type="module">
+
+    import navbar from "./components/navbar.js"
+    import { getdata, showsearchresult} from "./scripts/showdata.js"
+
+    console.log(navbar)
+
+   let navbar_div =  document.getElementById("nav-bar-container")
+   navbar_div.innerHTML = navbar();
+
+    //www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
+  
+
+    async function searchresult(){
+        try{
+           let recipe = document.getElementById("searchmeal").value;
+           console.log(recipe);
+           let url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${recipe}`
+
+        //    var res = await fetch(url);
+           var data = await getdata(url)
+           let container = document.getElementById("container")
+           showsearchresult(data.meals,container);
+        //    console.log(data);
+
+        }
+        catch(err){
+            console.log(err);
+        }     
+    }
+    searchresult();
+
+
+    
+  
+    let debouncing = document.getElementById("searchmeal")
+     console.log(debouncing)
+
+     let timerid;
+    
+    function debounce(){
+    if(timerid){
+        clearTimeout(timerid);
+    }
+    timerid = setTimeout(function(){
+        searchresult();
+        },1000)
+    }
+
+    //  const debouncing_function =  debounce(searchresult,3000);
+
+     debouncing.addEventListener("input",debounce);
+     
+   
+
+</script>
